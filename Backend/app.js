@@ -5,7 +5,7 @@ import cors from 'cors'
 app.use(cors());
 const app=express();
 app.get('/',(req,res)=>{
-    res.send('<h1>Hello world</h1>')
+    res.send('<h1>Hello </h1>')
 })
 export default app
   
