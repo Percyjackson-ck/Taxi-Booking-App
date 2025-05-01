@@ -1,11 +1,22 @@
 import express from 'express';
 import dotevn from 'dotenv'
-dotevn.config()
 import cors from 'cors'
-app.use(cors());
+import connectToDb from './db/db.js';
+import UserRoutes from './routes/userRoutes.js'
 const app=express();
+dotevn.config()
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+connectToDb();
+
+
+
 app.get('/',(req,res)=>{
-    res.send('<h1>Hello </h1>')
+    res.send('<h1>Hello</h1>')
 })
+app.use('/users',UserRoutes)
+
+
 export default app
   
