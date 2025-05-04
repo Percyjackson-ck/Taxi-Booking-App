@@ -1,6 +1,7 @@
 import userModel from "../models/userModel.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import blacklistTokenModel from "../models/blacklistTokenmodel.js";
 
 
 const authUser=async(req,res,next)=>{
@@ -9,6 +10,10 @@ const authUser=async(req,res,next)=>{
     
   if(!token){
     return res.status(401).json({message:'Unathorized'})
+  }
+  const isBlacklisted=await blacklistTokenModel.findOne({token:token});
+  if(isBlacklisted){
+    return res.status(401).json({message:'Unauthorized'});
   }
   try{
     const decoded=jwt.verify(token,process.env.JWT_SECRET)

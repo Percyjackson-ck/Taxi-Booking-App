@@ -1,7 +1,7 @@
 import userModel from '../models/userModel.js'
 import createUser from '../services/userServices.js'
 import { validationResult } from 'express-validator'
-
+import blacklistTokenModel from '../models/blacklistTokenmodel.js'
 const regitserUser=async(req,res,next)=>{
      const errors=validationResult(req);
   if(!errors.isEmpty()){
@@ -40,10 +40,22 @@ const loginUser=async(req,res,next)=>{
     return res.status(401).json({message:'Invaild passowrd'})
   }
   const token=user.generateAuthToken();
+  res.cookie('token',token,{
+    httpOnly:true,
+    secure:process.env.NODE_ENV==='production',
+    maxAge:3600000
+  })
   res.status(200).json({token,user});
 }
 
 const getuserProfile=async(req,res,next)=>{
     res.status(200).json(req.user);
 }
-export {regitserUser,loginUser,getuserProfile}
+
+const logoutUser=async(req,res,next)=>{
+  const token=req.cookies.token || req.headers.authorization.split(' ')[1];
+   res.clearCookie('token');
+   await blacklistTokenModel.create({token});
+   res.status(200).json({message:"Logged out"})
+}
+export {regitserUser,loginUser,getuserProfile,logoutUser}

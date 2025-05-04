@@ -38,7 +38,7 @@ const UserSchema=new mongoose.Schema({
 UserSchema.methods.generateAuthToken = function () {
     // this refers to the instance of the User document
     //when i use this i cannot use arrow funciton 
-    const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET,{expiresIn:'24h'});
     return token;
   };
 
