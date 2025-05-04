@@ -2,13 +2,17 @@ import userModel from '../models/userModel.js'
 import createUser from '../services/userServices.js'
 import { validationResult } from 'express-validator'
 import blacklistTokenModel from '../models/blacklistTokenmodel.js'
-const regitserUser=async(req,res,next)=>{
+const registerUser=async(req,res,next)=>{
      const errors=validationResult(req);
   if(!errors.isEmpty()){
     return res.status(400).json({errors:errors.array()})
   }
   const { fullname, email, password } = req.body;
 const { firstname, lastname } = fullname;
+const checkEmail=await userModel.findOne({email});
+if(checkEmail){
+  return res.status(400).json({message:"User already exits"})
+}
 
   const hashedPassword = await userModel.hashPassword(password);
 
@@ -58,4 +62,4 @@ const logoutUser=async(req,res,next)=>{
    await blacklistTokenModel.create({token});
    res.status(200).json({message:"Logged out"})
 }
-export {regitserUser,loginUser,getuserProfile,logoutUser}
+export {registerUser,loginUser,getuserProfile,logoutUser}
