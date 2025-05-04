@@ -43,4 +43,7 @@ const loginUser=async(req,res,next)=>{
   res.status(200).json({token,user});
 }
 
-export {regitserUser,loginUser}
+const getuserProfile=async(req,res,next)=>{
+    res.status(200).json(req.user);
+}
+export {regitserUser,loginUser,getuserProfile}

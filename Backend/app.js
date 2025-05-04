@@ -3,11 +3,14 @@ import dotevn from 'dotenv'
 import cors from 'cors'
 import connectToDb from './db/db.js';
 import UserRoutes from './routes/userRoutes.js'
+import cookieParser from 'cookie-parser';
+import { cookie } from 'express-validator';
 const app=express();
 dotevn.config()
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(cookieParser())
 connectToDb();
 
 
