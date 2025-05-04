@@ -1,7 +1,7 @@
 import express from 'express'
 import {body} from 'express-validator'
 import {registerUser,loginUser,getuserProfile,logoutUser } from '../controllers/userController.js';
-import authUser from '../middleware/authMiddleware.js';
+import {authUser} from '../middleware/authMiddleware.js';
 const router=express.Router();
 
 router.post('/register',

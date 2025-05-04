@@ -1,7 +1,7 @@
 import userModel from '../models/userModel.js'
 import createUser from '../services/userServices.js'
 import { validationResult } from 'express-validator'
-import blacklistTokenModel from '../models/blacklistTokenmodel.js'
+import blacklistTokenModel from '../models/blacklistTokenModel.js'
 const registerUser=async(req,res,next)=>{
      const errors=validationResult(req);
   if(!errors.isEmpty()){
