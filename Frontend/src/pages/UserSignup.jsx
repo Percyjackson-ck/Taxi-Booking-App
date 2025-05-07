@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Uber_logo from '../images/Uber_logo_.png'
-import { Link } from 'react-router-dom'
+import { Link ,useNavigate} from 'react-router-dom'
+import axios from 'axios'
+import {UserDataContext} from '../context/UserContext'
 const UserSignup = () => {
 
 
@@ -9,19 +11,34 @@ const UserSignup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userData, setUserData] = useState({});
-  const submitHandler = () => {
+  const nagivate=useNavigate();
+  const {user,setUser}=useContext(UserDataContext);
+  const submitHandler = async(e) => {
     e.preventDefault();
 
 
-    setUserData({
-      fullName:{
-        firstName:firstName,
-        lastName:lastName
+   const newUser={
+      fullname:{
+        firstname:firstName,
+        lastname:lastName
       },
       email: email,
       password: password
-    })
   
+  
+   }
+
+   const respone=await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,newUser);
+  //  console.log(respone);
+   
+  if(respone.status==201){
+    const data=respone.data
+    setUser(data.user)
+    localStorage.setItem('token',data.token)
+
+    nagivate('/home')
+  }
+   
     setFirstName('');
     setLastName('');
     setEmail('');
@@ -33,9 +50,7 @@ const UserSignup = () => {
       <div>
         <img className='w-16 mb-10' src={Uber_logo} alt="" />
 
-        <form onSubmit={() => {
-          submitHandler(e);
-        }} >
+        <form onSubmit={submitHandler} >
 
 
           <h3 className='text-lg font-medium mb-2'>What's your name</h3>
@@ -78,7 +93,7 @@ const UserSignup = () => {
              }}
             placeholder='Enter your password' />
           <button
-            className='bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 border w-full text-base '>Login</button>
+            className='bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 border w-full text-base '>Create Account</button>
           <p className='text-center mb-4'>Already have a account?
             <Link to='/login' className='text-blue-600'>Login in here</Link>  </p>
 

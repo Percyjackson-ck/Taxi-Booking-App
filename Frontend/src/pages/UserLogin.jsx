@@ -1,18 +1,33 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Uber_logo from '../images/Uber_logo_.png'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { UserDataContext } from '../context/UserContext'
+import axios from 'axios'
 const UserLogin = () => {
   const [email,setEmail]=  useState('');
   const [password,setPassword]=useState('');
   const[userData,setUserData]=useState({});
-  const submitHandler=()=>{
+
+   const {user,setUser}=useContext(UserDataContext);
+   const nagivate=useNavigate();
+
+  const submitHandler=async(e)=>{
     e.preventDefault();
  
 
-     setUserData({
+    const userData= {
       email:email,
       password:password
-     })
+     }
+    //  console.log(userData);
+     
+     const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`,userData)
+     if(response.status==200){
+      const data=response.data;
+      setUser(data.user);
+      localStorage.setItem('token',data.token)
+      nagivate('/home')
+     }
      
 
     setEmail('');
@@ -24,11 +39,9 @@ const UserLogin = () => {
          <div>
          <img  className='w-16 mb-10'   src={Uber_logo} alt="" />
         
-        <form onSubmit={()=>{
-          submitHandler(e);
-        }} >
+        <form onSubmit={submitHandler} >
             <h3 className='text-lg font-medium mb-2'>What's your email</h3>
-            <input 
+          <input 
             className='bg-[#eeee] mb-7 rounded px-4 py-2 border w-full text-lg placeholder:text-base'
             type="email"
             onChange={(e)=>{

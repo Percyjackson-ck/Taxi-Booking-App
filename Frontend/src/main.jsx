@@ -4,13 +4,14 @@ import './index.css'
 import UserContext from './context/UserContext.jsx'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
+import CaptainConetxt from './context/CaptainContext.jsx'
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+    <CaptainConetxt>
     <UserContext>
     <BrowserRouter>
     <App />
     </BrowserRouter>
     </UserContext>
+    </CaptainConetxt>
     
-  </StrictMode>,
 )

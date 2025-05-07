@@ -7,6 +7,8 @@ const registerUser=async(req,res,next)=>{
   if(!errors.isEmpty()){
     return res.status(400).json({errors:errors.array()})
   }
+  // console.log(req);
+  
   const { fullname, email, password } = req.body;
 const { firstname, lastname } = fullname;
 const checkEmail=await userModel.findOne({email});
@@ -22,12 +24,14 @@ if(checkEmail){
     password:hashedPassword,
 
   });
-  const token=user.generateAuthToken();
+  // const token=user.generateAuthToken();
   res.status(201).json({token,user})
 
 
 }
 const loginUser=async(req,res,next)=>{
+  console.log(req.email);
+  
   const  errors=validationResult(req);
   if(!errors.isEmpty()){
    return res.status(400).json({errors:errors.array()})

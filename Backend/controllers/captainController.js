@@ -3,7 +3,8 @@ import { validationResult } from "express-validator";
 import createCaptain from'../services/captainServices.js' 
 import blacklistTokenModel from "../models/blacklistTokenModel.js";
 const registerCaptain=async(req,res)=>{
-
+//    console.log(req);
+   
     const errors=validationResult(req);
     if(!errors.isEmpty()){
         return res.status(400).json({errors:errors.array()});
