@@ -62,10 +62,31 @@ const getCaptainProfile=async(req,res)=>{
     res.status(200).json({captain:req.captain});
 }
 
-const logoutCaptain=async(req,res)=>{
-    const token=req.cookies.token || req.headers.authorization?.split(' ')[1];
-    await blacklistTokenModel.create({token});
-    res.clearCookie('token')
-    res.status(200).json({message:'Logout suncessfull'})
-}
+const logoutCaptain = async (req, res) => {
+    try {
+      // Log the request object to check its contents (useful for debugging)
+      console.log(req.headers.authorization);
+      
+      // Get the token from cookies or authorization header
+      const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+      
+      if (!token) {
+        return res.status(400).json({ message: 'Token not provided' });
+      }
+      
+      // Blacklist the token
+      await blacklistTokenModel.create({ token });
+      
+      // Clear the token from cookies
+      res.clearCookie('token');
+      
+      // Send the success response
+      res.status(200).json({ message: 'Logout successful' });
+    } catch (error) {
+      // Handle any errors that occur
+      console.error(error);
+      res.status(500).json({ message: 'Something went wrong, please try again later' });
+    }
+  };
+  
 export {registerCaptain,loginCaptain,getCaptainProfile,logoutCaptain}

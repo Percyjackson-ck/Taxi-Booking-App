@@ -5,10 +5,11 @@ import { useNavigate } from 'react-router-dom';
 const UserLogout = () => {
     const navigate = useNavigate();
     const [hasLoggedOut, setHasLoggedOut] = useState(false);
+   
 
     useEffect(() => {
         if (hasLoggedOut) return;
-
+           
         const logout = async () => {
             const token = localStorage.getItem('token');
             try {
@@ -25,7 +26,7 @@ const UserLogout = () => {
             } catch (err) {
                 // 401 is expected if token is gone
                 console.log("Logout error:", err.response?.status);
-            } 
+            }
         };
 
         logout();
