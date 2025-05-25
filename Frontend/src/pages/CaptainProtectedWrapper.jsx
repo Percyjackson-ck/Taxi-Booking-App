@@ -23,6 +23,8 @@ const CaptainProtectedWrapper = ({ children }) => {
         .then((response) => {
           if (response.status === 200) {
             const data = response.data;
+            console.log(data);
+            
             setCaptain(data.captain); // Store captain data
             setIsLoading(false); // Stop loading once data is fetched
           }
