@@ -6,11 +6,12 @@ import axios from 'axios';
 const CaptainProtectedWrapper = ({ children }) => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
-  const { setCaptain } = useCaptain();
+  const { setCaptain ,captain} = useCaptain();
   const [isLoading, setIsLoading] = useState(true);
-
+ 
+  
   useEffect(() => {
-    if (!token) {
+    if (!token ) {
       navigate('/captain-login'); // Redirect if no token
     } else {
       // Fetch captain data after token check
@@ -25,12 +26,16 @@ const CaptainProtectedWrapper = ({ children }) => {
             const data = response.data;
             console.log(data);
             
+            if (data == null || !data.captain) {
+      navigate('/captain-login');
+      return;  // <-- stop execution here
+    }
+            
             setCaptain(data.captain); // Store captain data
             setIsLoading(false); // Stop loading once data is fetched
           }
         })
         .catch((err) => {
-          console.log(err);
           localStorage.removeItem('token'); // Remove invalid token
           navigate('/captain-login'); // Redirect to login if error occurs
         });

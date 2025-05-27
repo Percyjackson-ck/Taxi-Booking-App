@@ -9,7 +9,7 @@ const CaptainLogout = () => {
 
     // This useEffect will only run once, without looping
     useEffect(() => {
-        console.log(`useEffect called #${counter + 1}, Current counter value: ${counter}`);
+        // console.log(`useEffect called #${counter + 1}, Current counter value: ${counter}`);
 
         if (hasLoggedOut) return;
 
@@ -27,7 +27,7 @@ const CaptainLogout = () => {
                             Authorization: `Bearer ${token}`,
                         },
                     });
-                    console.log(response);
+                    // console.log(response);
 
                     localStorage.removeItem('token');
                     setHasLoggedOut(true);

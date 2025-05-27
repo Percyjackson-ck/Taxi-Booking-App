@@ -1,41 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { useCaptain } from '../context/CaptainContext';
+import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { UserDataContext } from '../context/UserContext';
 
 const UserProtectedWrapper = ({ children }) => {
   const token = localStorage.getItem('token');
-  const nagivate=useNavigate();
-  const {captain,setCaptain}=useCaptain();
-  const [isLoading,setIsLoading]=useState(true);
- useEffect(()=>{
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserDataContext);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
     if (!token) {
-        nagivate('/login')
-      }
- },[token])
+      navigate('/login');
+      return;
+    }
 
- axios.get(`${import.meta.env.VITE_BASE_URL}/users/profile`,{
-  headers:{
-    Authorization: `Bearer ${token}` 
-  }
- })
- .then((respone)=>{
-  if(respone.status==200){
-    const data=respone.data;
-    setCaptain(data.user)
-    setIsLoading(false);
-  }
- }).catch((err)=>{
-  console.log(err);
-  localStorage.removeItem('token');
-  nagivate('/login')
-  
- })
-  if(isLoading){
-    return(
-      <div>Loading....</div>
-    )
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/users/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          const data = response.data;
+          
+          if (!data || !data.user) {
+            navigate('/login');
+            return;
+          }
 
+          setUser(data.user);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        localStorage.removeItem('token');
+        navigate('/login');
+      });
+  }, [token, navigate, setUser]);
+
+  if (isLoading) {
+    return <div>Loading....</div>;
   }
 
   return <>{children}</>;

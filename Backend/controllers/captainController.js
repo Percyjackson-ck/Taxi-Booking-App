@@ -49,7 +49,7 @@ const loginCaptain=async(req,res)=>{
     }
     const isMatch=await captain.comparePassword(password);
     if(!isMatch){
-        res.status(401).jons({message:'Invalid password'})
+        res.status(401).json({message:'Invalid password'})
 
     }
     const token=captain.generateToken();
@@ -65,7 +65,7 @@ const getCaptainProfile=async(req,res)=>{
 const logoutCaptain = async (req, res) => {
     try {
       // Log the request object to check its contents (useful for debugging)
-      console.log(req.headers.authorization);
+      // console.log(req.headers.authorization);
       
       // Get the token from cookies or authorization header
       const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
@@ -84,7 +84,7 @@ const logoutCaptain = async (req, res) => {
       res.status(200).json({ message: 'Logout successful' });
     } catch (error) {
       // Handle any errors that occur
-      console.error(error);
+    //   console.error(error);
       res.status(500).json({ message: 'Something went wrong, please try again later' });
     }
   };

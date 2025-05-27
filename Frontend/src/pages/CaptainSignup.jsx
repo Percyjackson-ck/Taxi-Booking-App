@@ -155,10 +155,9 @@ const CaptainSignup = () => {
   <option style={{ fontSize: "16px", color: "red" }}>Select vehicle Type</option>
 
     <option value="car">Car</option>
-    <option value="bike">Bike</option>
+    <option value="motorcycle">Bike</option>
     <option value="truck">Truck</option>
     <option value="bus">Bus</option>
-    <option value="van">Van</option>
   </select>
 </div>
 

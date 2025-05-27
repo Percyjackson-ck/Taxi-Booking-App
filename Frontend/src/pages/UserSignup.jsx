@@ -94,10 +94,11 @@ const UserSignup = () => {
             placeholder='Enter your password' />
           <button
             className='bg-[#111] text-white font-semibold mb-3 rounded px-4 py-2 border w-full text-base '>Create Account</button>
-          <p className='text-center mb-4'>Already have a account?
-            <Link to='/login' className='text-blue-600'>Login in here</Link>  </p>
+         
 
         </form>
+         <p className='text-center mb-4'>Already have a account?
+            <Link to='/login' className='text-blue-600'>Login in here</Link>  </p>
 
       </div>
       <div>

@@ -24,13 +24,14 @@ if(checkEmail){
     password:hashedPassword,
 
   });
-  // const token=user.generateAuthToken();
+  const token=user.generateAuthToken();
   res.status(201).json({token,user})
 
 
 }
 const loginUser=async(req,res,next)=>{
-  console.log(req.email);
+   
+   
   
   const  errors=validationResult(req);
   if(!errors.isEmpty()){
@@ -53,11 +54,12 @@ const loginUser=async(req,res,next)=>{
     secure:process.env.NODE_ENV==='production',
     maxAge:3600000
   })
+  
   res.status(200).json({token,user});
 }
 
 const getuserProfile=async(req,res,next)=>{
-    res.status(200).json(req.user);
+    res.status(200).json({user:req.user});
 }
 
 const logoutUser=async(req,res,next)=>{

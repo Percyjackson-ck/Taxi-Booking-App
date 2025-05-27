@@ -1,6 +1,4 @@
-import React, { use } from 'react'
 import  { useState } from 'react'
-import Uber_logo from '../images/Uber_logo_.png'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
