@@ -13,10 +13,14 @@ const VehiclePanel = (props) => {
          <h5
          onClick={()=>{
           props.setVehiclePanelOpen(false)
+          props.setConfirmRidePanel(true);
          }} 
           className='absolute top-0 w-[93%] text-center p-1  '><i className=" text-3xl  text-gray-300 ri-arrow-down-wide-line p-10"></i></h5>
         <div
-          onClick={() => setSelectedVehicle('uber-go')}
+          onClick={() => {setSelectedVehicle('uber-go')
+          props.setConfirmRidePanel(true);
+
+          }}
           className={`flex border-2 mb-2 rounded-2xl p-3 items-center justify-between cursor-pointer ${selectedVehicle === 'uber-go' ? 'border-black' : 'border-gray-300'
             }`}
         >
@@ -30,7 +34,10 @@ const VehiclePanel = (props) => {
         </div>
 
         <div
-          onClick={() => setSelectedVehicle('moto')}
+          onClick={() => {setSelectedVehicle('moto')
+          props.setConfirmRidePanel(true);
+
+          }}
           className={`flex border-2 mb-2 rounded-2xl p-3 items-center justify-between cursor-pointer ${selectedVehicle === 'moto' ? 'border-black' : 'border-gray-300'
             }`}
         >

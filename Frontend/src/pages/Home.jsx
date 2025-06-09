@@ -5,6 +5,9 @@ import gsap from 'gsap'
 import 'remixicon/fonts/remixicon.css'
 import LocationSearchPanel from '../Components/LocationSearchPanel.jsx'
 import VehiclePanel from '../Components/VehiclePanel.jsx'
+import  ConfirmRide from '../Components/ConfirmRide.jsx'
+import WaitingForDriver from '../Components/WaitingForDriver.jsx'
+import LookingForDriver from '../Components/LookingForDriver.jsx'
 const Home = () => {
   const [pickup, setPickUp] = useState('');
   const [destination, setDestination] = useState('');
@@ -13,8 +16,16 @@ const Home = () => {
   const panelRef = useRef(null);
   const panelCloseRef = useRef(null);
   const vehiclePanelRef=useRef(null)
-  const[vehiclePanelOpen,setVehiclePanelOpen]=useState(false);
+  const vehicleFoundRef=useRef(null)
+  const waitingForDriverRef=useRef(null)
 
+
+  const[vehiclePanelOpen,setVehiclePanelOpen]=useState(false);
+  const[confirmRidePanel,setConfirmRidePanel]=useState(false);
+
+  const[vehicleFound,setVehicleFound]=useState(false);
+  const confirmRideRef=useRef(null);
+  const [waitingForDriverPanel,setWaitingForDriverPanel]=useState(false)
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -55,6 +66,57 @@ const Home = () => {
     });
   }
 }, [vehiclePanelOpen]);
+
+
+ useGSAP(() => {
+  if(confirmRidePanel){
+    gsap.to(confirmRideRef.current, {
+      y: 0,
+      duration: 0.5,
+      ease: "power2.out"
+    });
+  } else {
+    gsap.to(confirmRideRef.current, {
+      y: "100%",
+      duration: 0.5,
+      ease: "power2.in"
+    });
+  }
+}, [confirmRidePanel]);
+
+ useGSAP(() => {
+  if(vehicleFound){
+    gsap.to(vehicleFoundRef.current, {
+      y: 0,
+      duration: 0.5,
+      ease: "power2.out"
+    });
+  } else {
+    gsap.to(vehicleFoundRef.current, {
+      y: "100%",
+      duration: 0.5,
+      ease: "power2.in"
+    });
+  }
+}, [vehicleFound]);
+
+
+useGSAP(() => {
+  if(waitingForDriverPanel){
+    gsap.to(waitingForDriverRef.current, {
+      y: 0,
+      duration: 0.5,
+      ease: "power2.out"
+    });
+  } else {
+    gsap.to(waitingForDriverRef.current, {
+      y: "100%",
+      duration: 0.5,
+      ease: "power2.in"
+    });
+  }
+}, [waitingForDriverPanel]);
+
 
 
 
@@ -102,9 +164,20 @@ const Home = () => {
         </div>
       </div>
 
-      <div ref={vehiclePanelRef} className='fixed w-full z-10 bg-white bottom-0 px-3 py-8'>
-        <VehiclePanel setVehiclePanelOpen={setVehiclePanelOpen} />
+      <div ref={vehiclePanelRef} className='fixed w-full z-10  translate-y-full  bg-white bottom-0 px-3 py-8 pt-12'>
+        <VehiclePanel setConfirmRidePanel={setConfirmRidePanel} setVehiclePanelOpen={setVehiclePanelOpen} />
 
+      </div>
+      <div ref={confirmRideRef} className='fixed w-full z-10  translate-y-full  bg-white bottom-0 px-3 py-8 pt-12'>
+        <ConfirmRide   setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
+
+      </div>
+       <div ref={vehicleFoundRef}className='fixed w-full z-10  translate-y-full  bg-white bottom-0 px-3 py-8 pt-12'>
+       <LookingForDriver setVehicleFound={setVehicleFound}/>
+      </div>
+
+       <div  ref={waitingForDriverRef} className='fixed w-full z-10 translate-y-full   bg-white bottom-0 px-3 py-8 pt-12'>
+       <WaitingForDriver setWaitingForDriverPanel={setWaitingForDriverPanel}  />
       </div>
     </div>
   );
