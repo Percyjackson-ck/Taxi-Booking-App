@@ -13,7 +13,7 @@ const VehiclePanel = (props) => {
          <h5
          onClick={()=>{
           props.setVehiclePanelOpen(false)
-          props.setConfirmRidePanel(true);
+          // props.setConfirmRidePanel(true);
          }} 
           className='absolute top-0 w-[93%] text-center p-1  '><i className=" text-3xl  text-gray-300 ri-arrow-down-wide-line p-10"></i></h5>
         <div
