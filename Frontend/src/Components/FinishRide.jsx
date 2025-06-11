@@ -49,6 +49,8 @@ const FinishRide = (props) => {
 
 
 
+
+
                     <Link
                         to='/captain-home'
                         className='block text-center mt-5 w-full bg-green-600 text-white font-semibold p-3 rounded-lg text-lg'>
