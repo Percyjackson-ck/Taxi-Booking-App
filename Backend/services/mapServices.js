@@ -20,8 +20,17 @@ export async function getAddressCoordinate(address) {
 }
 
 export async function getDistanceAndTime(origin, destination) {
+  if (!origin || !destination) throw new Error("Origin and destination are required");
+
+  const [origLat, origLng] = origin.split(',').map(Number);
+  const [destLat, destLng] = destination.split(',').map(Number);
+
+  if ([origLat, origLng, destLat, destLng].some(isNaN)) {
+    throw new Error("Invalid coordinates format. Use 'lat,lng'");
+  }
+
   const apiKey = process.env.GEOAPIFY_API_KEY;
-  const url = `https://api.geoapify.com/v1/routing?waypoints=${origin.lat},${origin.lng}|${destination.lat},${destination.lng}&mode=drive&apiKey=${apiKey}`;
+  const url = `https://api.geoapify.com/v1/routing?waypoints=${origLat},${origLng}|${destLat},${destLng}&mode=drive&apiKey=${apiKey}`;
 
   try {
     const { data } = await axios.get(url);
@@ -30,14 +39,15 @@ export async function getDistanceAndTime(origin, destination) {
     if (!info) throw new Error("Distance or time data not found.");
 
     return {
-      distance: info.distance,      // in meters
-      time: info.time               // in seconds
+      distance: info.distance, // in meters
+      time: info.time // in seconds
     };
   } catch (error) {
     console.error("Geoapify Routing Error:", error.message);
     throw error;
   }
 }
+
 
 
 export async function getSuggestions(input) {

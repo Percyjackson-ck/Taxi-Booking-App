@@ -22,22 +22,8 @@ const getCoordinates = async (req, res, next) => {
 
   const { origin, destination } = req.query;
 
-  if (!origin || !destination) {
-    return res.status(400).json({ error: "Origin and destination are required" });
-  }
-
-  const [origLat, origLng] = origin.split(',').map(Number);
-  const [destLat, destLng] = destination.split(',').map(Number);
-
-  if ([origLat, origLng, destLat, destLng].some(isNaN)) {
-    return res.status(400).json({ error: "Invalid coordinates format. Use 'lat,lng'" });
-  }
-
   try {
-    const result = await getDistanceAndTime(
-      { lat: origLat, lng: origLng },
-      { lat: destLat, lng: destLng }
-    );
+    const result = await getDistanceAndTime(origin, destination); // Pass as strings
 
     res.status(200).json({
       success: true,
