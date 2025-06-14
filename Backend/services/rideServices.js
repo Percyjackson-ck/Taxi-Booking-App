@@ -1,17 +1,25 @@
 import { getAddressCoordinate,getDistanceAndTime} from "../services/mapServices.js";
 import rideModel from "../models/rideModel.js"
-
+import crypto from 'crypto'
 async function getFare(pickup, destination) {
   if (!pickup) throw new Error('Pickup is required');
   if (!destination) throw new Error('Destination is required');
+  // console.log(pickup);
+  // console.log(destination);
+  
+  
 const originCoordinates = await getAddressCoordinate(pickup);
 const destinationCoordinates = await getAddressCoordinate(destination);
+// console.log(originCoordinates);
+// console.log(destinationCoordinates);
+
 
 const originnew = `${originCoordinates.lat},${originCoordinates.lng}`;
 const destinationnew = `${destinationCoordinates.lat},${destinationCoordinates.lng}`;
 
 const distanceTime = await getDistanceAndTime(originnew, destinationnew);
-
+  // console.log("📏 distance (km):", distanceTime.distance / 1000);
+  // console.log("⏱ time (min):", distanceTime.time / 60);
 //   console.log(distanceTime);
    const baseFare={
     auto:30,
@@ -28,14 +36,24 @@ const distanceTime = await getDistanceAndTime(originnew, destinationnew);
     car:3,
     motorcycle:1.5
    }
+  //  console.log(distanceTime.distance/1000);
+   
   const fare = {
-  auto: Math.round((baseFare.auto + (distanceTime.distance / 1000 * perKmRate.auto) + (distanceTime.time / 60 * perMinuteRate.auto)) * 100) / 100,
-  car: Math.round((baseFare.car + (distanceTime.distance / 1000 * perKmRate.car) + (distanceTime.time / 60 * perMinuteRate.car)) * 100) / 100,
-  motorcycle: Math.round((baseFare.motorcycle + (distanceTime.distance / 1000 * perKmRate.motorcycle) + (distanceTime.time / 60 * perMinuteRate.motorcycle)) * 100) / 100
+  auto: Math.round((baseFare.auto + ((distanceTime.distance / 1000) * perKmRate.auto) + ((distanceTime.time / 60) * perMinuteRate.auto)) * 100) / 100,
+  car: Math.round((baseFare.car + ((distanceTime.distance / 1000) * perKmRate.car) + ((distanceTime.time / 60 )* perMinuteRate.car)) * 100) / 100,
+  motorcycle: Math.round((baseFare.motorcycle + ((distanceTime.distance / 1000 )* perKmRate.motorcycle) + ((distanceTime.time / 60) * perMinuteRate.motorcycle)) * 100) / 100
 };
 
    return fare;
 }
+
+function getOtp(num){
+  const otp=crypto.randomInt(Math.pow(10,num-1),Math.pow(10,num)).toString();
+  return otp;
+  
+
+}
+
 const createRide=async({
   user,pickup,destination,vehicleType
 })=>{
@@ -48,6 +66,7 @@ const createRide=async({
      user,
      pickup,
      destination,
+     opt:getOtp(6),
      fare:fare[vehicleType]
 
   })

@@ -46,7 +46,12 @@ const rideSchema=new mongoose.Schema({
     signature:{
         type:String,
     },
+   opt:{
+    type:String,
+    select:false,
+    required:false,
 
+   }
 
 })
 
