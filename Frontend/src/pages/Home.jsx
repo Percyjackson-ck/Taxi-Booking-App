@@ -32,7 +32,7 @@ const Home = () => {
   const [vehicleFound, setVehicleFound] = useState(false);
   const [waitingForDriverPanel, setWaitingForDriverPanel] = useState(false);
 
-  const[fare,setFare]=useState(null);
+  const[fare,setFare]=useState({});
 
 
   const submitHandler = (e) => {
