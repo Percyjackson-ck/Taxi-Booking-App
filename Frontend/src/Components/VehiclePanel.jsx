@@ -2,7 +2,8 @@ import React from 'react'
 import { useState } from 'react';
 const VehiclePanel = (props) => {
       const [selectedVehicle, setSelectedVehicle] = useState(null);
-    
+      // console.log(props.fare);
+      
   return (
     <div>
 
@@ -30,7 +31,8 @@ const VehiclePanel = (props) => {
             <h5 className='font-medium text-sm'>2 min away</h5>
             <p className='font-medium text-xs text-gray-600'>Affordable Compact rides</p>
           </div>
-          <h2 className='text-lg font-semibold'>₹193.20</h2>
+        <h2 className="text-lg font-semibold">₹{props.fare?.car}</h2>
+
         </div>
 
         <div
@@ -47,7 +49,7 @@ const VehiclePanel = (props) => {
             <h5 className='font-medium text-sm'>3 min away</h5>
             <p className='font-medium text-xs text-gray-600'>Affordable Motor cycle ride</p>
           </div>
-          <h2 className='text-lg font-semibold'>₹64.20</h2>
+          <h2 className='text-lg font-semibold'>₹{props.fare?.motorcycle}</h2>
         </div>
 
         <div
@@ -61,7 +63,7 @@ const VehiclePanel = (props) => {
             <h5 className='font-medium text-sm'>10 min away</h5>
             <p className='font-medium text-xs text-gray-600'>Affordable Auto ride</p>
           </div>
-          <h2 className='text-lg font-semibold'>₹120.20</h2>
+          <h2 className='text-lg font-semibold'>₹{props.fare?.auto}</h2>
         </div>
 
 

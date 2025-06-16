@@ -32,6 +32,9 @@ const Home = () => {
   const [vehicleFound, setVehicleFound] = useState(false);
   const [waitingForDriverPanel, setWaitingForDriverPanel] = useState(false);
 
+  const[fare,setFare]=useState(null);
+
+
   const submitHandler = (e) => {
     e.preventDefault();
   };
@@ -177,13 +180,14 @@ const Home = () => {
   pickup={pickup}
   destination={destination}
   activeField={activeField}
+  setFare={setFare}
 />
 
         </div>
       </div>
 
       <div ref={vehiclePanelRef} className='fixed w-full z-10 translate-y-full bg-white bottom-0 px-3 py-8 pt-12'>
-        <VehiclePanel setConfirmRidePanel={setConfirmRidePanel} setVehiclePanelOpen={setVehiclePanelOpen} />
+        <VehiclePanel setConfirmRidePanel={setConfirmRidePanel} setVehiclePanelOpen={setVehiclePanelOpen}  fare={fare} setFare={setFare}/>
       </div>
 
       <div ref={confirmRideRef} className='fixed w-full z-10 translate-y-full bg-white bottom-0 px-3 py-8 pt-12'>
