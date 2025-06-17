@@ -1,6 +1,21 @@
 import React from 'react'
 
 const LookingForDriver = (props) => {
+
+const formatAddressParts = (address) => {
+  if (!address) return { building: '', full: '' };
+  const parts = address.split(',');
+  return {
+    building: parts[0]?.trim(),
+    full: address
+  };
+};
+
+const pickupParts = formatAddressParts(props.pickup);
+const destinationParts = formatAddressParts(props.destination);
+
+
+
   return (
        <div >
       <h5
@@ -16,22 +31,22 @@ const LookingForDriver = (props) => {
           <div className='flex items-center gap-5 p-3 border-b-2 border-gray-400 '>
             <i className=" text-lg ri-map-pin-user-fill"></i>
             <div >
-              <h3 className='text-lg font-medium'>562/11-A</h3>
-              <p className='text-sm -mt-1 text-gray-600'>Kankariya Talab,Bhopal</p>
+              <h3 className='text-lg font-medium'>{pickupParts.building}</h3>
+              <p className='text-sm -mt-1 text-gray-600'>{pickupParts.full}</p>
             </div>
 
           </div>
           <div className='flex items-center gap-5  p-3 border-b-2 border-gray-400'>
             <i className=" text-lg ri-map-pin-2-fill"></i>
             <div >
-              <h3 className='text-lg font-medium'>562/11-A</h3>
-              <p className='text-sm -mt-1 text-gray-600'>Kankariya Talab,Bhopal</p>
+              <h3 className='text-lg font-medium'>{destinationParts.building}</h3>
+              <p className='text-sm -mt-1 text-gray-600'>{destinationParts.full}</p>
             </div>
           </div>
           <div className='flex items-center gap-5  p-3'>
             <i className="ri-currency-line"></i>
             <div >
-              <h3 className='text-lg font-medium'>₹193.20</h3>
+              <h3 className='text-lg font-medium'>₹{props.fare?.[props.vehicleType]}</h3>
               <p className='text-sm -mt-1 text-gray-600'>Cash Cash</p>
             </div>
           </div>

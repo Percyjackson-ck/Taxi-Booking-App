@@ -1,6 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useEffect } from 'react';
 const ConfirmRide = (props) => {
+  // console.log(props.vehicleType);
+    // console.log(props.vehicleType);
+
+     const [loading, setLoading] = useState(false);
+    const formatAddressParts = (address) => {
+  if (!address) return { building: '', full: '' };
+  const parts = address.split(',');
+  return {
+    building: parts[0]?.trim(),
+    full: address
+  };
+};
+
+const pickupParts = formatAddressParts(props.pickup);
+const destinationParts = formatAddressParts(props.destination);
+
+  const handleConfirm = async () => {
+    setLoading(true);
+    try {
+      await props.createRide(props.vehicleType);
+      props.setVehicleFound(true);
+      props.setConfirmRidePanel(false);
+    } catch (err) {
+      console.error("Ride creation failed", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <div >
@@ -15,33 +44,33 @@ const ConfirmRide = (props) => {
           <div className='flex items-center gap-5 p-3 border-b-2 border-gray-400 '>
             <i className=" text-lg ri-map-pin-user-fill"></i>
             <div >
-              <h3 className='text-lg font-medium'>562/11-A</h3>
-              <p className='text-sm -mt-1 text-gray-600'>Kankariya Talab,Bhopal</p>
+              <h3 className='text-lg font-medium'>{pickupParts.building}</h3>
+              <p className='text-sm -mt-1 text-gray-600'>{pickupParts.full}</p>
             </div>
 
           </div>
           <div className='flex items-center gap-5  p-3 border-b-2 border-gray-400'>
             <i className=" text-lg ri-map-pin-2-fill"></i>
             <div >
-              <h3 className='text-lg font-medium'>562/11-A</h3>
-              <p className='text-sm -mt-1 text-gray-600'>Kankariya Talab,Bhopal</p>
+              <h3 className='text-lg font-medium'>{destinationParts.building}</h3>
+              <p className='text-sm -mt-1 text-gray-600'>{props.destination}</p>
             </div>
           </div>
           <div className='flex items-center gap-5  p-3'>
             <i className="ri-currency-line"></i>
             <div >
-              <h3 className='text-lg font-medium'>₹193.20</h3>
+              <h3 className='text-lg font-medium'>₹{props.fare?.[props.vehicleType]}</h3>
               <p className='text-sm -mt-1 text-gray-600'>Cash Cash</p>
             </div>
           </div>
         </div>
-        <button
-          onClick={() => {
-            props.setVehicleFound(true);
-            props.setConfirmRidePanel(false);
-          }}
-
-          className='w-full mt-5 bg-green-600 text-white font-semibold p-2 rounded-lg'>Confim</button>
+   <button
+          onClick={handleConfirm}
+          disabled={loading}
+          className={`w-full mt-3 p-2 rounded-lg font-semibold text-white ${loading ? 'bg-gray-500' : 'bg-green-600'}`}
+        >
+          {loading ? 'Finding ride...' : 'Confirm'}
+        </button>
       </div>
     </div>
   )
