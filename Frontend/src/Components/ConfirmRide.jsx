@@ -20,7 +20,8 @@ const destinationParts = formatAddressParts(props.destination);
   const handleConfirm = async () => {
     setLoading(true);
     try {
-      await props.createRide(props.vehicleType);
+      const respone= await props.createRide(props.vehicleType);
+      console.log(respone);
       props.setVehicleFound(true);
       props.setConfirmRidePanel(false);
     } catch (err) {
@@ -29,6 +30,7 @@ const destinationParts = formatAddressParts(props.destination);
       setLoading(false);
     }
   };
+  
 
 
   return (
