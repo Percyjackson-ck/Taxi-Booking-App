@@ -1,4 +1,5 @@
 import axios from "axios";
+import captainModel from "../models/captainModel.js";
 
 export async function getAddressCoordinate(address) {
   const apiKey = process.env.GEOAPIFY_API_KEY;
@@ -69,3 +70,16 @@ export async function getSuggestions(input) {
   }
 }
 
+export async function getCaptainInTheRadius(ltd, lng, radiusInMiles) {
+  const captains = await captainModel.find({
+    location: {
+      $geoWithin: {
+        $centerSphere: [
+          [ltd, lng], // [longitude, latitude]
+          radiusInMiles / 3963.2 // radius in radians
+        ]
+      }
+    }
+  });
+  return captains;
+}
