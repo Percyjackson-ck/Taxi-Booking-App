@@ -17,20 +17,44 @@ export function initializeSocket(server) {
 
   io.on('connection', (socket) => {
     console.log(`Client connected: ${socket.id}`);
-    socket.on('join',async(data)=>{
-        const {userId,userType}=data;
-        if(userType=='user'){
-            await userModel.findByIdAndUpdate(userId,{
-                socketId:socket.id
-            })
-            }else if(userType=='captain'){
-                await captainModel.findByIdAndUpdate(userId,{socketId:socket.id})
-            }
-             socket.on('disconnect', () => {
-      console.log(`Client disconnected: ${socket.id}`);
-    });
+    socket.on('join', async (data) => {
+      // console.log(`user joined is ${data.userId}`);
+      // const useremail = await captainModel.findById(data.userId)
+      // console.log(useremail.email);
+
+      const { userId, userType } = data;
+      if (userType == 'user') {
+        await userModel.findByIdAndUpdate(userId, {
+          socketId: socket.id
+        })
+      } else if (userType == 'captain') {
+        await captainModel.findByIdAndUpdate(userId, { socketId: socket.id })
+      }
+     
+  socket.on('update-location-captain',async(data)=>{
+          const {userId,location}=data;
+          console.log(data);
+          
+          // console.log(data.location);
+          
+           if(!location|| !location.ltd||!location.lng ){
+            return socket.emit('error',{message:'Invalid location data'})
+            
+           }
+            await captainModel.findByIdAndUpdate(userId,
+             { location:{
+                ltd:location.ltd,
+                lng:location.lng
+              }}
+            )
+           
+  })
+
+      socket.on('disconnect', () => {
+        console.log(`Client disconnected: ${socket.id}`);
+      });
     })
-   
+
   });
 }
 
