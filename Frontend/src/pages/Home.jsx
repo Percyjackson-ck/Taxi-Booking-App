@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Uber_logo from '../images/Uber_logo_.png'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
@@ -10,8 +10,10 @@ import VehiclePanel from '../Components/VehiclePanel.jsx'
 import ConfirmRide from '../Components/ConfirmRide.jsx'
 import WaitingForDriver from '../Components/WaitingForDriver.jsx'
 import LookingForDriver from '../Components/LookingForDriver.jsx'
-
+import { SocketContext } from '../context/SocketContext.jsx'
+import { UserDataContext } from '../context/UserContext.jsx'
 const Home = () => {
+  
   const [pickup, setPickUp] = useState('');
   const [destination, setDestination] = useState('');
   const [panelOpen, setPanelOpen] = useState(false);
@@ -34,11 +36,18 @@ const Home = () => {
 
   const[fare,setFare]=useState({});
   const [vehicleType,setVehicleType]=useState('');
-
+   const { socket}=useContext(SocketContext)
+   const {user}=useContext(UserDataContext)
+  //  console.log(user);
+   
   const submitHandler = (e) => {
     e.preventDefault();
   };
-
+ useEffect(() => {
+  if (socket && user?._id) {
+    socket.emit("join", { userType: "user", userId: user._id });
+  }
+}, [socket, user?._id]);
  const handlePickupChange = async (e) => {
   const value = e.target.value;
   setPickUp(value);

@@ -21,7 +21,7 @@ const destinationParts = formatAddressParts(props.destination);
     setLoading(true);
     try {
       const respone= await props.createRide(props.vehicleType);
-      console.log(respone);
+      // console.log(respone);
       props.setVehicleFound(true);
       props.setConfirmRidePanel(false);
     } catch (err) {
