@@ -71,12 +71,16 @@ export async function getSuggestions(input) {
 }
 
 export async function getCaptainInTheRadius(ltd, lng, radiusInMiles) {
+   //radius in km
+  // console.log(ltd,lng,radiusInMiles);
+  
   const captains = await captainModel.find({
     location: {
       $geoWithin: {
         $centerSphere: [
           [ltd, lng], // [longitude, latitude]
-          radiusInMiles / 3963.2 // radius in radians
+          radiusInMiles / 6371
+          // radius in radians
         ]
       }
     }
