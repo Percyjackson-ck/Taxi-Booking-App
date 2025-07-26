@@ -7,7 +7,7 @@ import captainModel from '../models/captainModel.js';
 
 const authUser=async(req,res,next)=>{
     const token = req.cookies.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
-    // cons ole.log(token);
+    // console.log(token);
     
   if(!token){
     return res.status(401).json({message:'Unathorized'})

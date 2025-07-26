@@ -11,30 +11,40 @@ const UserLogin = () => {
    const {user,setUser}=useContext(UserDataContext);
    const nagivate=useNavigate();
 
-  const submitHandler=async(e)=>{
-    e.preventDefault();
- 
+  const submitHandler = async (e) => {
+  e.preventDefault();
 
-    const userData= {
-      email:email,
-      password:password
-     }
-     
-     const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`,userData)
-     if(response.status==200){
-      const data=response.data;
+  const UserData = {
+    email: email,
+    password: password
+  };
+//  alert(JSON.stringify(UserData));
+try {
+   const response = await axios.post(
+  `${import.meta.env.VITE_BASE_URL}/users/login`,
+  UserData,
+   // <== Important for cookies!
+);
+
+    if (response.status === 200) {
+      const data = response.data;
       console.log(data.user);
-      
-      setUser(data.user);
-      localStorage.setItem('token',data.token)
-      nagivate('/home')
-     }
-     
 
-    setEmail('');
-    setPassword('');
+      setUser(data.user);
+      localStorage.setItem('token', data.token);
+
+      // alert('Login successful!');
+      nagivate('/home');
+    }
+  } catch (error) {
+    console.error("Login error:", error.response?.data || error.message);
+    // alert(error.response?.data?.message || "Login failed. Please check your credentials.");
   }
-  
+
+  setEmail('');
+  setPassword('');
+};
+
   return (
     <div className='p-7 h-screen flex flex-col justify-between'>
          <div>
