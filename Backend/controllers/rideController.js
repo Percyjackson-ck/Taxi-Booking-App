@@ -1,8 +1,9 @@
 import { getAddressCoordinate, getCaptainInTheRadius } from "../services/mapServices.js";
-import { createRide, getFare } from "../services/rideServices.js";
-import { validationResult } from "express-validator";
+import { createRide, getFare,confirmRideService } from "../services/rideServices.js";
+import { ExpressValidator, validationResult } from "express-validator";
 // import { Socket } from "socket.io";
-
+import {sendMessageToSocketId } from '../socket.js'
+import rideModel from "../models/rideModel.js";
 const createRideController=async(req,res)=>{
     const errors=validationResult(req);
     if(!errors.isEmpty()){
@@ -12,11 +13,19 @@ const createRideController=async(req,res)=>{
     try{
         const ride=await createRide({user:req.user._id,pickup,destination,vehicleType});
         const pickupCorrdinates=await getAddressCoordinate(pickup)
-        console.log("user location ",pickupCorrdinates);
+        // console.log("user location ",pickupCorrdinates);
         
         
         const captainsInRadius=await  getCaptainInTheRadius(pickupCorrdinates.lat,pickupCorrdinates.lng,2)
-        console.log(captainsInRadius);
+        // console.log(captainsInRadius);
+        ride.otp=""
+        const rideWithUser=await rideModel.findOne({_id:ride._id}).populate('user')
+        captainsInRadius.map(captain=>{
+          sendMessageToSocketId(captain.socketId,{
+            event:'new-ride',
+            data:rideWithUser
+          })
+        })
         res.status(201).json(ride);
         
     }catch(err){
@@ -36,4 +45,24 @@ const getFareController=async(req,res)=>{
         return res.status(400).json({message:err.message})
     }
 }
-export {createRideController,getFareController}
+
+const confirmRide=async(req,res)=>{
+    const errors=ExpressValidator(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()})
+
+    }
+    const rideId=req.body;
+    try{
+   const ride=await confirmRideService(rideId,req.user._id)
+   sendMessageToSocketId(ride.user.socketId,{
+    event:'ride-confirmed',
+    data:ride
+   })
+   return res.status(200).json(ride);
+    }
+    catch(err){
+        return res.status(500).json({message:err.message})
+    }
+}
+export {createRideController,getFareController,confirmRide}

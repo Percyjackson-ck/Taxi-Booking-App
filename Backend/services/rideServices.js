@@ -72,6 +72,24 @@ const createRide=async({
   })
   return ride;
 }
-export {getFare,createRide}
+const confirmRideService=async({rideId})=>{
+    if(!rideId){
+      throw new Error('Ride is required')
+    }
+    await rideModel.findOneAndUpdate({
+      _id:rideId,
+    },
+    {
+      status:'accepted',
+      captian:captian._id
+    }
+  )
+    const ride=await (await rideModel.findOne({_id:ride})).populate('user')
+    if(!ride){
+      throw new Error('Ride not found')
+    }
+    return ride.save();
+}
+export {getFare,createRide,confirmRideService}
 
 

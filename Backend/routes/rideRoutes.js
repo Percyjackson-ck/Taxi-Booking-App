@@ -2,7 +2,8 @@ import {createRideController, getFareController} from '../controllers/rideContro
 import express from 'express'
 import { body, query } from 'express-validator';
 const router=express.Router();
-import { authUser } from '../middleware/authMiddleware.js';
+import { authCaptain, authUser } from '../middleware/authMiddleware.js';
+import {confirmRide} from '../controllers/rideController.js'
 router.post('/create',
     body('pickup').isString().isLength({min:3}).withMessage('Invalid pickup address'),
     body('destination').isString().isLength({min:3}).withMessage('Invalid destination address'),
@@ -19,5 +20,11 @@ router.get('/get-fare',
     getFareController
 )
 
+router.post('/confirm',
+    authCaptain,
+    body('rideId').isMongoId().withMessage('Invalid ride id'),
+   confirmRide
+    
+)
 
 export  default router

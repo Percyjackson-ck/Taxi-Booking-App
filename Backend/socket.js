@@ -35,7 +35,7 @@ export function initializeSocket(server) {
           const {userId,location}=data;
           // console.log(data);
           
-          console.log("captian location is :",data.location);
+          // console.log("captian location is :",data.location);
           
            if(!location|| !location.ltd||!location.lng ){
             return socket.emit('error',{message:'Invalid location data'})
@@ -65,7 +65,7 @@ export function initializeSocket(server) {
  */
 export function sendMessageToSocketId(socketId, message) {
   if (io) {
-    io.to(socketId).emit('message', message);
+    io.to(socketId).emit(message.event, message.data);
   } else {
     console.log('Socket.io not initialized.');
   }
