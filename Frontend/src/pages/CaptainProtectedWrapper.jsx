@@ -24,7 +24,7 @@ const CaptainProtectedWrapper = ({ children }) => {
         .then((response) => {
           if (response.status === 200) {
             const data = response.data;
-            console.log(data);
+            // console.log(data);
             
             if (data == null || !data.captain) {
       navigate('/captain-login');

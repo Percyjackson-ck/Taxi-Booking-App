@@ -116,6 +116,7 @@ const Home = () => {
    }
 
   }
+  socket.on('ride-confirmed')
   useGSAP(() => {
     if (panelOpen) {
       gsap.to(panelRef.current, { height: '70%', padding: 24 });
@@ -237,6 +238,7 @@ const Home = () => {
         pickup={pickup}
         destination={destination}
          createRide={createRide}
+         passenger={passenger}
          />
       </div>
 
