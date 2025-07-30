@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 const ConfirmRidePopUp = (props) => {
     const [otp,setOtp]=useState('')
+    const nagivate=useNavigate();
     const submitHandler = (e) => {
   e.preventDefault();
+  props.confirmRide();
+
+  nagivate('/captain-riding')
+
   // handle OTP submit here if needed
 };
 
@@ -66,11 +71,11 @@ const ConfirmRidePopUp = (props) => {
                         className='bg-[#eee] px-6 py-4 text-lg font-mono  rounded-lg w-full mt-3' type="text" placeholder='Enter OTP' />
 
 
-                        <Link
-                            to='/captain-riding'
+                        <button
+                          type="submit"
                             className='block text-center mt-5 w-full bg-green-600 text-white font-semibold p-3 rounded-lg text-lg'>
                             Confirm
-                        </Link>
+                        </button>
 
                         <button
 

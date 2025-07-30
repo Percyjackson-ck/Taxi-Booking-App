@@ -36,7 +36,7 @@ export function initializeSocket(server) {
           // console.log(data);
           
           // console.log("captian location is :",data.location);
-          
+          // 
            if(!location|| !location.ltd||!location.lng ){
             return socket.emit('error',{message:'Invalid location data'})
             

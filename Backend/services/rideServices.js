@@ -72,7 +72,7 @@ const createRide=async({
   })
   return ride;
 }
-const confirmRideService=async({rideId})=>{
+const confirmRideService=async({rideId,captain})=>{
     if(!rideId){
       throw new Error('Ride is required')
     }
@@ -81,13 +81,16 @@ const confirmRideService=async({rideId})=>{
     },
     {
       status:'accepted',
-      captian:captian._id
+      captain:captain._id
     }
   )
-    const ride=await (await rideModel.findOne({_id:ride})).populate('user')
+    const ride=await (await rideModel.findOne({_id:rideId})).populate('user')
     if(!ride){
       throw new Error('Ride not found')
     }
+    // console.log(ride.user);
+    
+    // console.log("🧠 Populated user:", ride.user?.socketId);
     return ride.save();
 }
 export {getFare,createRide,confirmRideService}

@@ -20,11 +20,14 @@ router.get('/get-fare',
     getFareController
 )
 
-router.post('/confirm',
+router.post(
+  '/confirm',
+  
     authCaptain,
-    body('rideId').isMongoId().withMessage('Invalid ride id'),
-   confirmRide
-    
-)
+    body('rideId').isMongoId().withMessage('Invalid ride ID'),
+  
+  confirmRide
+);
+
 
 export  default router
