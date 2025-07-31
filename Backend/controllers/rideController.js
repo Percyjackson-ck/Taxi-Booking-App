@@ -16,7 +16,7 @@ const createRideController=async(req,res)=>{
         // console.log("user location ",pickupCorrdinates);
         
         
-        const captainsInRadius=await  getCaptainInTheRadius(pickupCorrdinates.lat,pickupCorrdinates.lng,10)
+        const captainsInRadius=await  getCaptainInTheRadius(pickupCorrdinates.lat,pickupCorrdinates.lng,40)
         // console.log(captainsInRadius);
         ride.otp=""
         const rideWithUser=await rideModel.findOne({_id:ride._id}).populate('user')
@@ -55,7 +55,7 @@ const confirmRide=async(req,res)=>{
     }
     
     
-    const {rideId,captain}=req.body;
+    const {rideId,captain}=req.body;    
     if (!captain || !captain._id) {
   return res.status(400).json({ message: "Captain info is missing or invalid" });
 }

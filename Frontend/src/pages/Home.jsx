@@ -40,6 +40,8 @@ const Home = () => {
   const { user } = useContext(UserDataContext)
   //  console.log(user);
 
+  const [ride,setRide]=useState(null);
+
   const submitHandler = (e) => {
     e.preventDefault();
   };
@@ -56,6 +58,9 @@ const Home = () => {
     setWaitingForDriverPanel(true);
 
     setVehicleFound(false)
+    setRide(data)
+    console.log(ride);
+    
   })
 
 
@@ -265,7 +270,9 @@ const Home = () => {
       </div>
 
       <div ref={waitingForDriverRef} className='fixed w-full z-10 translate-y-full bg-white bottom-0 px-3 py-8 pt-12'>
-        <WaitingForDriver setWaitingForDriverPanel={setWaitingForDriverPanel} />
+        <WaitingForDriver
+        ride={ride}
+        setWaitingForDriverPanel={setWaitingForDriverPanel} />
       </div>
     </div>
   );
