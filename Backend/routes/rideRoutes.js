@@ -1,4 +1,4 @@
-import {createRideController, getFareController} from '../controllers/rideController.js';
+import {createRideController, getFareController,startride} from '../controllers/rideController.js';
 import express from 'express'
 import { body, query } from 'express-validator';
 const router=express.Router();
@@ -28,6 +28,11 @@ router.post(
   
   confirmRide
 );
-
+router.get('/start-ride',
+  authCaptain,
+  query('rideId').isMongoId().withMessage('Invalid ride id'),
+  query('otp').isString().isLength({min:6,max:6}).withMessage('Invalid otp'),
+  startride
+)
 
 export  default router

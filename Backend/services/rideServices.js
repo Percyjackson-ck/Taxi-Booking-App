@@ -1,6 +1,7 @@
 import { getAddressCoordinate,getDistanceAndTime} from "../services/mapServices.js";
 import rideModel from "../models/rideModel.js"
 import crypto from 'crypto'
+import { sendMessageToSocketId } from "../socket.js";
 async function getFare(pickup, destination) {
   if (!pickup) throw new Error('Pickup is required');
   if (!destination) throw new Error('Destination is required');
@@ -66,35 +67,73 @@ const createRide=async({
      user,
      pickup,
      destination,
-     opt:getOtp(6),
+     otp:getOtp(6),
      fare:fare[vehicleType]
 
   })
   return ride;
 }
 const confirmRideService=async({rideId,captain})=>{
-    if(!rideId){
-      throw new Error('Ride is required')
+ 
+    try {
+    if (!rideId) {
+      throw new Error('Ride is required');
     }
-    await rideModel.findOneAndUpdate({
-      _id:rideId,
-    },
-    {
-      status:'accepted',
-      captain:captain._id
+
+    await rideModel.findOneAndUpdate(
+      { _id: rideId },
+      {
+        status: 'accepted',
+        captain: captain._id,
+      }
+    );
+
+    const ride = await rideModel
+      .findOne({ _id: rideId })
+      .populate('user')
+      .populate('captain')  
+      .select('+otp')
+
+    if (!ride) {
+      throw new Error('Ride not found');
     }
-  )
-  const ride = await rideModel
-  .findOne({ _id: rideId })
-  .populate('user')
-    if(!ride){
-      throw new Error('Ride not found')
-    }
-    // console.log(ride.user);
-    
-    // console.log("🧠 Populated user:", ride.user?.socketId);
+
     return ride.save();
+  } catch (err) {
+    console.error("🚨 Error in confirmRideService:", err.message);
+     throw err; 
 }
-export {getFare,createRide,confirmRideService}
+}
+const startrideServices=async({rideId,otp,captain})=>{
+  if(!rideId  || !otp){
+    throw new Error('Ride id and otp are required')
+  }
+  const ride=await rideModel.findOne({
+    _id:rideId
+  }).populate('user')  
+  .populate('captain')  
+  .select('+otp')
+  if(!ride){
+    throw new Error('Ride not found')
+  }
+  if(ride.status!="accepted"){
+    throw new Error('Rode not Accepeted')
+  }
+  if(!ride.otp==otp){
+    throw new Error('Invalid OTP')
+  }
+  await rideModel.findOneAndUpdate({
+    _id:rideId
+  },{
+    status:'ongoing'
+  })
+  sendMessageToSocketId(rideId.user.socketId,{
+    event:'ride-started',
+    data:ride
+  })
+  return ride
+
+}
+export {getFare,createRide,confirmRideService,startrideServices}
 
 

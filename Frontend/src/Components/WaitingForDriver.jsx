@@ -15,8 +15,10 @@ const WaitingForDriver = (props) => {
 
         <img className='h-15' src="https://www.pngplay.com/wp-content/uploads/8/Uber-PNG-Photos.png" alt="" />
         <div className='text-right'>
-          <h2 className='text-lg font-medium'>{props.ride?.captain?.fullname?.firstname}</h2>
+          <h2 className='text-lg font-medium capitalize'>{props.ride?.captain?.fullname?.firstname}</h2>
           <h4 className='text-xl font-semibold -mt-1 -mb-1'>{props.ride?.captain?.vehicle?.plate}</h4>
+          <h4 className='text-xl font-semibold'>{props.ride?.otp} </h4>
+
         </div>
       </div>
       <div className='flex flex-col  gap-2 justify-between items-center'>

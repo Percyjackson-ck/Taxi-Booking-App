@@ -1,5 +1,5 @@
 import { getAddressCoordinate, getCaptainInTheRadius } from "../services/mapServices.js";
-import { createRide, getFare,confirmRideService } from "../services/rideServices.js";
+import { createRide, getFare,confirmRideService,startrideServices } from "../services/rideServices.js";
 import { ExpressValidator, validationResult } from "express-validator";
 // import { Socket } from "socket.io";
 import {sendMessageToSocketId } from '../socket.js'
@@ -73,4 +73,19 @@ const confirmRide=async(req,res)=>{
         return res.status(500).json({message:err.message})
     }
 }
-export {createRideController,getFareController,confirmRide}
+
+const startride=async(req,res)=>{
+    const errors=validationResult();
+    if(!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()})
+    }
+    const {rideId,otp}=req.query;
+    try
+    {
+        const ride=await startrideServices({rideId,otp,captain:req.captain})
+
+    }catch(err){
+        return res.status(500).json({message:err.message})
+    }
+}
+export {createRideController,getFareController,confirmRide,startride}

@@ -12,6 +12,7 @@ import WaitingForDriver from '../Components/WaitingForDriver.jsx'
 import LookingForDriver from '../Components/LookingForDriver.jsx'
 import { SocketContext } from '../context/SocketContext.jsx'
 import { UserDataContext } from '../context/UserContext.jsx'
+import { useNavigate } from 'react-router-dom'
 const Home = () => {
 
   const [pickup, setPickUp] = useState('');
@@ -39,7 +40,7 @@ const Home = () => {
   const { socket } = useContext(SocketContext)
   const { user } = useContext(UserDataContext)
   //  console.log(user);
-
+  const navigate=useNavigate();
   const [ride,setRide]=useState(null);
 
   const submitHandler = (e) => {
@@ -54,12 +55,12 @@ const Home = () => {
   }, [socket, user?._id]);
   
   socket.on('ride-confirmed', (data) => {
-    console.log(data);
+    // console.log(data);
     setWaitingForDriverPanel(true);
 
     setVehicleFound(false)
     setRide(data)
-    console.log(ride);
+    // console.log(ride);
     
   })
 
@@ -132,6 +133,12 @@ const Home = () => {
     }
 
   }
+  socket.on('ride-started',(ride)=>{
+    setWaitingForDriverPanel(false)
+    navigate('/riding')
+
+  })
+
   useGSAP(() => {
     if (panelOpen) {
       gsap.to(panelRef.current, { height: '70%', padding: 24 });
