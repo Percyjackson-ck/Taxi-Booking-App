@@ -1,6 +1,22 @@
+import axios from 'axios'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 const FinishRide = (props) => {
+    // console.log(props?.ride);
+    const nagivate=useNavigate();
+    async function endRide() {
+        const response=await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/end-ride`,{
+            rideId:props.ride._id
+        },{
+            headers:{
+                Authorization:`bearer ${localStorage.getItem('token')}`
+            }
+        })
+        if(response.status==200){
+            props.setFinishRidePanel(false)
+            nagivate('/captain-home')
+        }
+    }
     return (
         <div className='' >
 
@@ -13,7 +29,7 @@ const FinishRide = (props) => {
             <div className='flex items-center justify-between p-2 bg-yellow-400 rounded-lg mt-4'>
                 <div className='flex items-center gap-3'>
                     <img className='h-12 w-10 rounded-full object-cover' src="https://i.pinimg.com/736x/cb/33/d8/cb33d80fe655e221ae05f41c8edd0cdb.jpg" alt="" />
-                    <h2 className='text-lg font-medium'>{props.ride?.captain?.fullname.firstname}</h2>
+                    <h2 className='text-lg font-medium white'>{props.ride?.user?.fullname.firstname}</h2>
                 </div>
                 <h5 className='text-lg font-semibold'>2.2 KM</h5>
             </div>
@@ -51,11 +67,11 @@ const FinishRide = (props) => {
 
 
 
-                    <Link
-                        to='/captain-home'
+                    <button
+                        onClick={endRide}
                         className='block text-center mt-5 w-full bg-green-600 text-white font-semibold p-3 rounded-lg text-lg'>
                        Finish Ride
-                    </Link>
+                    </button>
                     <p className=' mt-6 text-xs'>click on finish ride button  if you have compeleted the payment</p>
 
 

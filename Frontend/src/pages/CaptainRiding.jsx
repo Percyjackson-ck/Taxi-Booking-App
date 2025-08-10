@@ -10,7 +10,7 @@ const CaptainRiding = () => {
     const finishRidePanelRef=useRef(null);
     const location=useLocation();
     const rideData=location.state?.ride
-    
+  
      useGSAP(() => {
   if(finishRidePanel){
     gsap.to(finishRidePanelRef.current, {
@@ -58,7 +58,7 @@ const CaptainRiding = () => {
              <div  ref={finishRidePanelRef} className='fixed w-full z-10  translate-y-full  bg-white h-[85%] bottom-0 px-3 py-8 pt-12'>
            <FinishRide 
            
-           rideData={rideData}
+           ride={rideData}
            setFinishRidePanel={setFinishRidePanel}/>
       </div>
         </div>

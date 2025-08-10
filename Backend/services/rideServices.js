@@ -2,6 +2,7 @@ import { getAddressCoordinate,getDistanceAndTime} from "../services/mapServices.
 import rideModel from "../models/rideModel.js"
 import crypto from 'crypto'
 import { sendMessageToSocketId } from "../socket.js";
+import { error } from "console";
 async function getFare(pickup, destination) {
   if (!pickup) throw new Error('Pickup is required');
   if (!destination) throw new Error('Destination is required');
@@ -127,12 +128,41 @@ const startrideServices=async({rideId,otp,captain})=>{
   },{
     status:'ongoing'
   })
-  // console.log(ride.user);
+  console.log(ride.status);
   
  
   return ride
 
 }
-export {getFare,createRide,confirmRideService,startrideServices}
+const endrideServices=async({rideId,captain})=>{
+  if(!rideId){
+    throw new Error ('Ride id is required')
+  }
+ const ride = await rideModel
+  .findOne({
+    _id: rideId,
+    captain: captain._id,
+  })
+  .populate('user')
+  .populate('captain')
+  .select('otp status');
+  
+  if(!ride){
+    throw new Error ('Ride not found')
+  }
+  console.log(ride.status);
+  
+  if(ride.status!='ongoing'){
+    throw new Error ('Ride is not ongoing')
+  }
+  await rideModel.findOneAndUpdate({
+    _id:rideId
+  },{
+    status:'completed'
+  })
+  return ride;
+}
+
+export {getFare,createRide,confirmRideService,startrideServices,endrideServices}
 
 
