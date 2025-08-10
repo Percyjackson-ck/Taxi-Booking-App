@@ -117,7 +117,7 @@ const startrideServices=async({rideId,otp,captain})=>{
     throw new Error('Ride not found')
   }
   if(ride.status!="accepted"){
-    throw new Error('Rode not Accepeted')
+    throw new Error('Ride not Accepeted')
   }
   if(!ride.otp==otp){
     throw new Error('Invalid OTP')
@@ -127,10 +127,9 @@ const startrideServices=async({rideId,otp,captain})=>{
   },{
     status:'ongoing'
   })
-  sendMessageToSocketId(rideId.user.socketId,{
-    event:'ride-started',
-    data:ride
-  })
+  // console.log(ride.user);
+  
+ 
   return ride
 
 }

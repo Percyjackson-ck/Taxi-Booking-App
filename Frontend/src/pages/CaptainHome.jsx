@@ -49,6 +49,7 @@ const CaptainHome = () => {
     // console.log(data);
     setRide(data)
     setRidePopUpPanel(true);
+    
 
   })
   async function confirmRide() {

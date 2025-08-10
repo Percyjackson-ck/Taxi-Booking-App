@@ -1,14 +1,32 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 const ConfirmRidePopUp = (props) => {
     const [otp, setOtp] = useState('')
     const nagivate = useNavigate();
-    const submitHandler = (e) => {
+    console.log(props.ride);
+    
+    const submitHandler = async (e) => {
         e.preventDefault();
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/start-ride`, 
+           {params: {
+            rideId: props.ride._id,
+            otp: otp
+           },
+            headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+            
+            }
 
+    });
 
-        nagivate('/captain-riding')
+     if(response.status==200){
+        props.setConfirmRidePopUpPanel(false)
+        props.setRidePopUpPanel(false);
+        nagivate('/captain-riding',{state:{ride:props.ride}})
+     }
+       
 
         // handle OTP submit here if needed
     };
